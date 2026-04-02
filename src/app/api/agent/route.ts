@@ -12,8 +12,6 @@ export async function POST(req: Request) {
 
   // If the user sent an image alongside their message, inject it into the
   // last user message as a multimodal content array.
-  // This lets useChat on the client stay simple (text only), while the server
-  // sends Claude the full image + text combination.
   const processedMessages = imageData
     ? messages.map((msg: { role: string; content: unknown }, idx: number) => {
         if (idx === messages.length - 1 && msg.role === "user") {
@@ -29,18 +27,21 @@ export async function POST(req: Request) {
       })
     : messages;
 
-  // streamText sends messages to Claude and streams the response back token by token.
-  // maxSteps: 5 means Claude can call a tool, get the result, then call another tool
-  // (up to 5 rounds) before writing the final response — all in one request.
+  // streamText sends messages to Qwen and streams the response back token by token.
+  // maxSteps: 5 allows multi-step tool calls (search → respond) in one request.
   const result = streamText({
-    model: anthropic("claude-sonnet-4-6"),
+    model: anthropic("claude-sonnet-4-5"),
     system: SYSTEM_PROMPT,
     messages: processedMessages,
     tools: agentTools,
     maxSteps: 5,
+    onError: ({ error }) => {
+      const e = error as Error & { statusCode?: number; responseBody?: string };
+      console.error("[agent] status:", e?.statusCode);
+      console.error("[agent] message:", e?.message);
+      console.error("[agent] body:", e?.responseBody);
+    },
   });
 
-  // toDataStreamResponse() converts the stream into the format the
-  // Vercel AI SDK's useChat hook expects on the client side.
   return result.toDataStreamResponse();
 }

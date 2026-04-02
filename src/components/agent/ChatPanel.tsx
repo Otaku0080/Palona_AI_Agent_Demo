@@ -64,8 +64,9 @@ export default function ChatPanel({ onClose, onMinimize, initialMessage }: ChatP
           }
         }
       },
-      onError: () => {
-        toast.error("Something went wrong. Please try again.");
+      onError: (error) => {
+        console.error("Chat error:", error);
+        toast.error(error.message || "Something went wrong. Please try again.");
       },
     });
 
@@ -251,6 +252,9 @@ export default function ChatPanel({ onClose, onMinimize, initialMessage }: ChatP
 
           <input
             ref={inputRef}
+            id="sal-chat-input"
+            name="message"
+            autoComplete="off"
             value={isRecording && interimTranscript ? interimTranscript : input}
             onChange={handleInputChange}
             placeholder={isRecording ? "Listening..." : "Ask about our menu..."}

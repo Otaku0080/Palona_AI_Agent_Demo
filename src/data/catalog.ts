@@ -9,7 +9,7 @@ export const catalog: MenuItem[] = [
     description:
       "Our all-time bestseller loaded with premium pepperoni slices on rich tomato sauce and melted mozzarella. Crispy edges, gooey center.",
     price: { small: 10.99, medium: 14.99, large: 18.99 },
-    imageUrl: "/images/items/classic-pepperoni.jpg",
+    imageUrl: "https://placehold.co/400x300/e8400c/ffffff?text=Classic+Pepperoni",
     tags: ["meat", "classic", "bestseller", "pepperoni"],
     dietary: [],
     allergens: ["gluten", "dairy"],
@@ -25,7 +25,7 @@ export const catalog: MenuItem[] = [
     description:
       "Simple and perfect — fresh mozzarella, hand-crushed tomato sauce, and fragrant basil on a thin crust. A vegetarian Italian classic.",
     price: { small: 9.99, medium: 13.99, large: 16.99 },
-    imageUrl: "/images/items/margherita.jpg",
+    imageUrl: "https://placehold.co/400x300/e8400c/ffffff?text=Margherita",
     tags: ["vegetarian", "classic", "simple", "basil", "light"],
     dietary: ["vegetarian"],
     allergens: ["gluten", "dairy"],
@@ -41,7 +41,7 @@ export const catalog: MenuItem[] = [
     description:
       "Smoky BBQ sauce base with grilled chicken, caramelized red onion, fresh cilantro, and melted mozzarella. Sweet, smoky, and savory.",
     price: { small: 12.99, medium: 16.99, large: 21.99 },
-    imageUrl: "/images/items/bbq-chicken.jpg",
+    imageUrl: "https://placehold.co/400x300/c13309/ffffff?text=BBQ+Chicken",
     tags: ["chicken", "bbq", "smoky", "bestseller", "sweet"],
     dietary: [],
     allergens: ["gluten", "dairy"],
@@ -57,7 +57,7 @@ export const catalog: MenuItem[] = [
     description:
       "Piled high with pepperoni, Italian sausage, crispy bacon, and ham. For the serious meat enthusiast. Perfect for a hungry group.",
     price: { small: 13.99, medium: 18.99, large: 23.99 },
-    imageUrl: "/images/items/meat-lovers.jpg",
+    imageUrl: "https://placehold.co/400x300/7f1d1d/ffffff?text=Meat+Lovers",
     tags: ["meat", "hearty", "family", "bestseller", "pepperoni", "sausage", "bacon"],
     dietary: [],
     allergens: ["gluten", "dairy"],
@@ -73,7 +73,7 @@ export const catalog: MenuItem[] = [
     description:
       "Colorful and fresh — bell peppers, mushrooms, black olives, red onion, and baby spinach on tomato sauce. Light, healthy, and flavorful.",
     price: { small: 11.99, medium: 15.99, large: 19.99 },
-    imageUrl: "/images/items/veggie-supreme.jpg",
+    imageUrl: "https://placehold.co/400x300/16a34a/ffffff?text=Veggie+Supreme",
     tags: ["vegetarian", "healthy", "colorful", "vegan-option", "mushroom", "pepper"],
     dietary: ["vegetarian"],
     allergens: ["gluten", "dairy"],
@@ -89,7 +89,7 @@ export const catalog: MenuItem[] = [
     description:
       "The classic sweet-and-savory combo — smoky ham and sweet pineapple chunks on tomato sauce with melted mozzarella.",
     price: { small: 11.99, medium: 15.99, large: 19.99 },
-    imageUrl: "/images/items/hawaiian.jpg",
+    imageUrl: "https://placehold.co/400x300/d97706/ffffff?text=Hawaiian",
     tags: ["sweet", "ham", "pineapple", "tropical", "fruity"],
     dietary: [],
     allergens: ["gluten", "dairy"],
@@ -105,7 +105,7 @@ export const catalog: MenuItem[] = [
     description:
       "Spicy buffalo-glazed chicken with a blue cheese drizzle, celery, and mozzarella. Hot, tangy, and completely addictive.",
     price: { small: 12.99, medium: 16.99, large: 21.99 },
-    imageUrl: "/images/items/buffalo-chicken.jpg",
+    imageUrl: "https://placehold.co/400x300/dc2626/ffffff?text=Buffalo+Chicken",
     tags: ["spicy", "chicken", "buffalo", "hot", "tangy"],
     dietary: [],
     allergens: ["gluten", "dairy", "egg"],
@@ -121,7 +121,7 @@ export const catalog: MenuItem[] = [
     description:
       "Premium wild mushroom medley with truffle oil, fontina cheese, and fresh thyme. Our gourmet vegetarian special — earthy and indulgent.",
     price: { small: 14.99, medium: 19.99, large: 25.99 },
-    imageUrl: "/images/items/truffle-mushroom.jpg",
+    imageUrl: "https://placehold.co/400x300/713f12/ffffff?text=Truffle+Mushroom",
     tags: ["premium", "vegetarian", "gourmet", "umami", "mushroom", "truffle"],
     dietary: ["vegetarian"],
     allergens: ["gluten", "dairy"],
@@ -140,7 +140,7 @@ export const catalog: MenuItem[] = [
     description:
       "Freshly baked breadsticks brushed with garlic butter and herbs. Served with marinara dipping sauce. Perfect for sharing.",
     price: 6.99,
-    imageUrl: "/images/items/garlic-breadsticks.jpg",
+    imageUrl: "https://placehold.co/400x300/ca8a04/ffffff?text=Garlic+Breadsticks",
     tags: ["bread", "garlic", "sharing", "classic", "vegetarian", "dipping"],
     dietary: ["vegetarian"],
     allergens: ["gluten", "dairy"],
@@ -155,7 +155,7 @@ export const catalog: MenuItem[] = [
     description:
       "Crisp romaine lettuce, shaved parmesan, house-made Caesar dressing, and crunchy croutons. A fresh counterpart to any pizza.",
     price: 8.99,
-    imageUrl: "/images/items/caesar-salad.jpg",
+    imageUrl: "https://placehold.co/400x300/4d7c0f/ffffff?text=Caesar+Salad",
     tags: ["salad", "healthy", "fresh", "vegetarian", "crispy", "light"],
     dietary: ["vegetarian"],
     allergens: ["gluten", "dairy", "egg", "fish"],
@@ -170,7 +170,7 @@ export const catalog: MenuItem[] = [
     description:
       "Double-fried chicken wings with your choice of buffalo, BBQ, or honey garlic sauce. Served with ranch and celery sticks.",
     price: 12.99,
-    imageUrl: "/images/items/chicken-wings.jpg",
+    imageUrl: "https://placehold.co/400x300/b45309/ffffff?text=Crispy+Wings",
     tags: ["wings", "crispy", "sharing", "meat", "spicy", "buffalo", "bbq"],
     dietary: [],
     allergens: ["gluten", "dairy", "egg"],
@@ -185,7 +185,7 @@ export const catalog: MenuItem[] = [
     description:
       "Golden-fried mozzarella sticks with a gooey, stretchy center. Served with marinara sauce. The ultimate comfort snack.",
     price: 7.99,
-    imageUrl: "/images/items/mozzarella-sticks.jpg",
+    imageUrl: "https://placehold.co/400x300/eab308/ffffff?text=Mozz+Sticks",
     tags: ["cheese", "fried", "sharing", "classic", "vegetarian", "crispy"],
     dietary: ["vegetarian"],
     allergens: ["gluten", "dairy", "egg"],
@@ -200,7 +200,7 @@ export const catalog: MenuItem[] = [
     description:
       "Crispy seasoned fries smothered in cheddar sauce, crispy bacon bits, sour cream, and green onions. A meal in itself.",
     price: 9.99,
-    imageUrl: "/images/items/loaded-fries.jpg",
+    imageUrl: "https://placehold.co/400x300/a16207/ffffff?text=Loaded+Fries",
     tags: ["fries", "loaded", "cheese", "bacon", "hearty", "indulgent"],
     dietary: [],
     allergens: ["gluten", "dairy"],
@@ -218,7 +218,7 @@ export const catalog: MenuItem[] = [
     description:
       "Choice of Coke, Diet Coke, Sprite, or Dr Pepper. Perfect for sharing with the whole table.",
     price: 3.99,
-    imageUrl: "/images/items/soda-2liter.jpg",
+    imageUrl: "https://placehold.co/400x300/1d4ed8/ffffff?text=2L+Soda",
     tags: ["drink", "soda", "sharing", "cola", "cold"],
     dietary: [],
     allergens: [],
@@ -232,7 +232,7 @@ export const catalog: MenuItem[] = [
     category: "drinks",
     description: "Chilled still water. Simple, refreshing, and always the right choice.",
     price: 1.99,
-    imageUrl: "/images/items/bottled-water.jpg",
+    imageUrl: "https://placehold.co/400x300/0ea5e9/ffffff?text=Bottled+Water",
     tags: ["drink", "water", "healthy", "light"],
     dietary: ["vegan", "gluten-free"],
     allergens: [],
@@ -247,7 +247,7 @@ export const catalog: MenuItem[] = [
     description:
       "Freshly squeezed lemonade with a hint of mint. Real lemons, not concentrate. Perfectly tart and sweet.",
     price: 4.99,
-    imageUrl: "/images/items/craft-lemonade.jpg",
+    imageUrl: "https://placehold.co/400x300/fbbf24/ffffff?text=Craft+Lemonade",
     tags: ["drink", "lemonade", "fresh", "non-alcoholic", "fruity", "sweet"],
     dietary: ["vegan", "gluten-free"],
     allergens: [],
@@ -263,7 +263,7 @@ export const catalog: MenuItem[] = [
     description:
       "Classic root beer over two scoops of vanilla ice cream. A nostalgic dessert-drink mashup the whole family loves.",
     price: 4.99,
-    imageUrl: "/images/items/root-beer-float.jpg",
+    imageUrl: "https://placehold.co/400x300/78350f/ffffff?text=Root+Beer+Float",
     tags: ["drink", "dessert-drink", "sweet", "classic", "cold", "ice cream"],
     dietary: ["vegetarian"],
     allergens: ["dairy"],
@@ -280,7 +280,7 @@ export const catalog: MenuItem[] = [
     description:
       "Warm dough knots tossed in cinnamon sugar and drizzled with sweet vanilla glaze. A perfect sweet ending to your meal.",
     price: 6.99,
-    imageUrl: "/images/items/cinnamon-knots.jpg",
+    imageUrl: "https://placehold.co/400x300/d97706/ffffff?text=Cinnamon+Knots",
     tags: ["dessert", "sweet", "cinnamon", "sharing", "warm", "vegetarian"],
     dietary: ["vegetarian"],
     allergens: ["gluten", "dairy", "egg"],
@@ -295,7 +295,7 @@ export const catalog: MenuItem[] = [
     description:
       "Warm dark chocolate cake with a molten fudge center. Served with a dusting of powdered sugar. Dangerously good.",
     price: 5.99,
-    imageUrl: "/images/items/chocolate-lava-cake.jpg",
+    imageUrl: "https://placehold.co/400x300/1c1917/ffffff?text=Lava+Cake",
     tags: ["dessert", "chocolate", "warm", "premium", "indulgent", "sweet"],
     dietary: ["vegetarian"],
     allergens: ["gluten", "dairy", "egg"],
@@ -311,7 +311,7 @@ export const catalog: MenuItem[] = [
     description:
       "Rotating selection of house-made Italian gelato. Ask your server for today's flavors — always creamy, always fresh.",
     price: 4.99,
-    imageUrl: "/images/items/gelato-cup.jpg",
+    imageUrl: "https://placehold.co/400x300/ec4899/ffffff?text=House+Gelato",
     tags: ["dessert", "gelato", "cold", "italian", "sweet", "ice cream"],
     dietary: ["vegetarian", "gluten-free"],
     allergens: ["dairy"],
