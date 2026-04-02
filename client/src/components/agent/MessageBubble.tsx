@@ -49,7 +49,7 @@ function InlineProductCard({ itemId }: { itemId: string }) {
 
   return (
     <div className="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-xl p-3 my-2">
-      {/* plain <img> instead of next/image */}
+      {/* product image */}
       <div className="relative w-12 h-12 rounded-lg overflow-hidden shrink-0 bg-gray-200">
         <img
           src={item.imageUrl}

@@ -5,7 +5,7 @@ interface UseVoiceRecorderOptions {
   onAudioReady: (blob: Blob) => void;
 }
 
-// Records audio using the MediaRecorder API (replaces Web Speech API).
+// Records audio using the browser MediaRecorder API.
 // MediaRecorder works in all modern browsers and records real audio data
 // that we can POST to our server for Gemini to transcribe.
 export function useVoiceRecorder({ onAudioReady }: UseVoiceRecorderOptions) {

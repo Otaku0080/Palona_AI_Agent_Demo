@@ -1,75 +1,109 @@
 # PalonaSlice — AI Pizza Ordering Agent
 
-An AI-powered ordering assistant embedded in a pizza restaurant website. Built as a demo for Palona AI — whose real customers include restaurant chains like Pizza Guys, Cali BBQ, and Paris Baguette.
+An AI-powered ordering assistant embedded in a pizza restaurant website. Built as a take-home demo for Palona AI — whose real customers include restaurant chains like Pizza Guys, Cali BBQ, and Paris Baguette.
 
-**Sal**, the AI agent, handles all 4 use cases in a single conversation:
-- General Q&A ("What's your name?", "What are your hours?")
-- Text-based product recommendations ("Recommend a pizza for a group of 6")
-- Image-based food search (upload a food photo → Sal finds similar items)
-- Voice-based ordering (speak your request → Sal responds)
+**Sal**, the AI agent, handles all 4 use cases in one conversation:
 
-## Live Demo
+- **General Q&A** — hours, location, allergens, loyalty program
+- **Text recommendations** — "Recommend a pizza for a group of 6"
+- **Image search** — upload any food photo → Sal finds the closest menu match
+- **Voice ordering** — speak your request → Sal transcribes and responds
 
-> Deploy to Vercel (see deployment section below) and paste your URL here.
+---
 
 ## Tech Stack
 
-| Layer | Technology | Why |
-|-------|-----------|-----|
-| Framework | Next.js 15 (App Router) | React + Node.js API routes in one project; zero-config Vercel deploy |
-| Language | TypeScript | Type safety across catalog, tools, and API shapes |
-| Styling | Tailwind CSS | Utility classes inline; fast to build, easy to read |
-| AI | Vercel AI SDK + Anthropic Claude | `useChat` hook handles streaming; Claude claude-sonnet-4-6 for tool use + vision |
-| Voice | Web Speech API | Browser-native; no external service needed |
-| Image Search | Canvas resize → base64 → Claude Vision | Claude describes the food photo and searches the catalog |
-| Cart State | Zustand | Simple global store; ~5 lines to set up |
-| Deployment | Vercel | `git push` → live URL |
+| Layer | Technology | Purpose |
+|-------|-----------|---------|
+| Frontend | React + Vite + TypeScript | UI, HMR, proxies `/api` to Express during dev |
+| Styling | Tailwind CSS | Utility-first, brand colors `#e8400c` |
+| Backend | Node.js + Express | REST API server on port 3001 |
+| AI — Chat & Voice | Google Gemini (`gemini-3.1-flash-lite-preview`) | Text chat, recommendations, audio transcription |
+| AI — Image Search | Transformers.js + CLIP (`Xenova/clip-vit-base-patch32`) | Runs locally in Node.js — no external API, no GPU |
+| Voice Recording | Web MediaRecorder API | Browser-native audio recording (WebM/OGG) |
+| Image Upload | Canvas API | Client-side resize to max 800px before sending |
+| Cart State | Zustand | Global store, ~5 lines to set up |
+| Monorepo | npm workspaces | `client/` and `server/` share one `node_modules` |
 
-## Architecture: One Agent, Four Tools
+---
 
-All features route through a single Claude call at `POST /api/agent`. Claude decides which tool to call based on the user's message — the same pattern as multi-tool agent frameworks (Crew AI, LangChain).
+## How the 4 Features Work
 
 ```
-User message (text / voice transcript / image + text)
-        │
-        ▼
-POST /api/agent
-        │
-        ▼
-Claude (claude-sonnet-4-6) → picks tool(s):
-
-  search_catalog           ← text search & recommendations
-  identify_food_from_image ← image-based food search
-  add_to_cart              ← order confirmation
-  get_restaurant_info      ← hours, location, allergens
-
-        │
-        ▼
-Tool result returned to Claude
-        │
-        ▼
-Claude streams final response → browser
+User types text        ──► POST /api/chat        ──► Gemini streams response
+User describes need    ──► POST /api/chat        ──► Gemini recommends items
+User uploads image     ──► POST /api/image-search ──► CLIP ranks menu items
+                                                      ──► Gemini writes response
+User records voice     ──► POST /api/chat/voice  ──► Gemini transcribes audio
+                                                      ──► Gemini responds as Sal
 ```
 
-### Key files
+### Image Search (CLIP)
+1. User uploads a food photo (JPG, PNG, WebP, GIF, BMP, AVIF — max 10MB)
+2. Server runs CLIP locally to score every menu item against the photo
+3. Top matches are passed to Gemini along with the image
+4. Gemini identifies the food and writes a recommendation with `[PRODUCT:id]` markers
+5. Client parses the markers and renders inline product cards
 
-| File | Purpose |
-|------|---------|
-| `src/app/api/agent/route.ts` | Core agent endpoint — Claude + streaming + tools |
-| `src/lib/agent-tools.ts` | Tool definitions, system prompt, tool handler functions |
-| `src/lib/catalog-search.ts` | Weighted fuzzy search against the menu catalog |
-| `src/data/catalog.ts` | 20-item typed menu catalog (pizzas, sides, drinks, desserts) |
-| `src/components/agent/ChatPanel.tsx` | Chat UI using `useChat` hook |
-| `src/hooks/useVoiceInput.ts` | Web Speech API wrapper |
-| `src/hooks/useImageUpload.ts` | Canvas image resize → base64 |
-| `src/store/cart.ts` | Zustand cart store |
+### Voice Search (MediaRecorder → Gemini)
+1. User clicks the mic button — MediaRecorder records in WebM/OGG
+2. On stop, audio blob is POST'd to `/api/chat/voice`
+3. Gemini transcribes the audio (sent as the first SSE event so the user bubble updates immediately)
+4. Gemini responds as Sal with menu recommendations
+
+### Cart Updates
+Gemini appends a `[CART_ADD:{...}]` marker when a user confirms an order. The client parses it after the stream closes and updates the Zustand cart — no separate API call needed.
+
+---
+
+## Project Structure
+
+```
+Palona_AI_Agent_Demo/
+├── client/                        # Vite React frontend (port 3000)
+│   ├── vite.config.ts             # Proxies /api → localhost:3001; serves /public
+│   ├── tailwind.config.ts
+│   └── src/
+│       ├── main.tsx
+│       ├── App.tsx
+│       ├── components/
+│       │   ├── agent/
+│       │   │   ├── ChatPanel.tsx  # Chat state, SSE streaming, voice/image dispatch
+│       │   │   ├── ChatWidget.tsx # Floating button + panel toggle
+│       │   │   ├── MessageBubble.tsx # Parses [PRODUCT:id] → inline cards
+│       │   │   ├── VoiceButton.tsx
+│       │   │   └── ImageUpload.tsx
+│       │   └── menu/
+│       │       ├── MenuCard.tsx
+│       │       ├── MenuSection.tsx
+│       │       └── CartDrawer.tsx
+│       ├── hooks/
+│       │   ├── useImageUpload.ts  # Canvas resize with raw-file fallback
+│       │   └── useVoiceRecorder.ts # MediaRecorder wrapper
+│       ├── data/catalog.ts        # 19 menu items
+│       ├── store/cart.ts          # Zustand cart store
+│       └── types/
+├── server/                        # Express backend (port 3001)
+│   └── src/
+│       ├── index.ts               # App entry, middleware, route registration
+│       ├── routes/
+│       │   ├── chat.ts            # POST /api/chat and POST /api/chat/voice
+│       │   └── image.ts           # POST /api/image-search (CLIP + Gemini)
+│       ├── data/catalog.ts        # Same catalog used for CLIP labels
+│       └── types/catalog.ts
+├── public/images/                 # Food photos served as static assets
+├── .env.example
+└── package.json                   # Root workspace (runs both client + server)
+```
+
+---
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js v20+ ([nodejs.org](https://nodejs.org))
-- An Anthropic API key ([console.anthropic.com](https://console.anthropic.com))
+- A Gemini API key — free at [aistudio.google.com](https://aistudio.google.com)
 
 ### Local Development
 
@@ -78,116 +112,66 @@ Claude streams final response → browser
 git clone https://github.com/your-username/Palona_AI_Agent_Demo.git
 cd Palona_AI_Agent_Demo
 
-# 2. Install dependencies
+# 2. Install all workspace dependencies
 npm install
 
 # 3. Set up environment
 cp .env.example .env.local
-# Edit .env.local and add your ANTHROPIC_API_KEY
+# Add your key: GEMINI_API_KEY=AIza...
 
-# 4. Run the dev server
+# 4. Start both servers
 npm run dev
-
-# 5. Open http://localhost:3000
+# client → http://localhost:3000
+# server → http://localhost:3001
 ```
 
 ### Environment Variables
 
 | Variable | Description |
 |----------|-------------|
-| `ANTHROPIC_API_KEY` | Your Anthropic API key (required) |
+| `GEMINI_API_KEY` | Google Gemini API key (required) |
+
+---
 
 ## API Reference
 
-### `POST /api/agent`
+### `POST /api/chat`
+Text chat with conversation history.
 
-The main agent endpoint. Accepts a conversation and returns a streaming response.
-
-**Request body:**
+**Request:**
 ```json
 {
   "messages": [
     { "role": "user", "content": "Recommend a vegetarian pizza" }
-  ],
-  "imageData": {
-    "base64": "<base64 encoded image>",
-    "mediaType": "image/jpeg"
-  }
+  ]
 }
 ```
+**Response:** `text/event-stream` — chunks of `data: {"text":"..."}`, ends with `data: [DONE]`
 
-- `messages` — full conversation history in `{ role, content }` format
-- `imageData` — optional; include when the user attaches a photo
+---
 
-**Response:** `text/event-stream` in Vercel AI SDK data stream format
+### `POST /api/chat/voice`
+Multipart form with audio blob. Returns transcript + response over SSE.
 
-### `GET /api/catalog`
+**Form fields:** `audio` (Blob), `history` (JSON string of prior messages)
 
-Returns the full menu catalog.
+**Response:** SSE — first event is `data: {"transcript":"..."}`, then text chunks, then `[DONE]`
 
-**Response:**
-```json
-{
-  "items": [...],
-  "categories": ["pizza", "sides", "drinks", "desserts"],
-  "specials": [...]
-}
-```
+---
 
-## Project Structure
+### `POST /api/image-search`
+Multipart form with image file. Runs CLIP locally then asks Gemini to write the response.
 
-```
-src/
-├── app/
-│   ├── page.tsx              # Homepage
-│   ├── layout.tsx            # Root layout
-│   └── api/
-│       ├── agent/route.ts    # POST /api/agent
-│       └── catalog/route.ts  # GET /api/catalog
-├── components/
-│   ├── layout/Header.tsx
-│   ├── menu/MenuGrid.tsx
-│   ├── menu/MenuCard.tsx
-│   ├── cart/CartDrawer.tsx
-│   └── agent/
-│       ├── ChatWidget.tsx    # Floating chat button + panel
-│       ├── ChatPanel.tsx     # Message list + input bar
-│       ├── MessageBubble.tsx # Parses [PRODUCT:id] markers → inline cards
-│       ├── VoiceButton.tsx
-│       └── ImageUpload.tsx
-├── data/catalog.ts           # 20 menu items
-├── lib/
-│   ├── agent-tools.ts        # Claude tool definitions
-│   └── catalog-search.ts     # Fuzzy search algorithm
-├── hooks/
-│   ├── useVoiceInput.ts
-│   └── useImageUpload.ts
-├── store/cart.ts             # Zustand cart
-└── types/
-    ├── catalog.ts
-    ├── agent.ts
-    └── cart.ts
-```
+**Form fields:** `image` (File — JPG/PNG/WebP/GIF/BMP/AVIF, max 10MB)
 
-## Deployment
+**Response:** `text/event-stream` — same format as `/api/chat`
 
-### Deploy to Vercel (Recommended)
+---
 
-1. Push this repo to GitHub
-2. Go to [vercel.com](https://vercel.com) → **Add New Project** → import your repo
-3. Vercel auto-detects Next.js — no build configuration needed
-4. In **Settings → Environment Variables**, add `ANTHROPIC_API_KEY`
-5. Click **Deploy**
+## Notes
 
-Every `git push main` triggers an automatic redeploy.
+**CLIP cold start** — the first image search downloads the CLIP model (~85MB) from Hugging Face. Subsequent requests use the cached model and are fast.
 
-The `vercel.json` sets a 30-second timeout on the agent route to accommodate multi-step tool calls.
+**Voice browser support** — MediaRecorder is supported in all modern browsers. Chrome uses WebM, Safari uses MP4. Both are sent to Gemini for transcription.
 
-## Voice Input Notes
-
-Voice uses the browser's native `SpeechRecognition` API — no Whisper or external service. Supported in Chrome and Safari. Firefox users will see a fallback message.
-
-## Image Search Notes
-
-Images are resized client-side to max 800px before sending (keeps API payloads under ~200KB). Claude's vision capability identifies the food in the photo, extracts search terms, and calls `search_catalog` to find similar items in the catalog.
-
+**Image formats** — the client tries canvas-resize first (produces a compact JPEG). If the browser can't decode the format, it falls back to sending the raw file. HEIC (iPhone default) is not supported by the browser canvas — share iPhone photos as JPEG instead.

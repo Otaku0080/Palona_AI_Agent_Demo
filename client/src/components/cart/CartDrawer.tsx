@@ -62,7 +62,7 @@ export default function CartDrawer({ isOpen, onClose }: CartDrawerProps) {
                 key={`${item.itemId}-${item.size}`}
                 className="flex gap-3 bg-gray-50 rounded-xl p-3"
               >
-                {/* Item image — plain <img> instead of next/image */}
+                {/* item image */}
                 <div className="relative w-14 h-14 rounded-lg overflow-hidden shrink-0 bg-gray-200">
                   <img
                     src={item.imageUrl}
