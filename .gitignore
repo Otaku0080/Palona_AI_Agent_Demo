@@ -1,18 +1,9 @@
 # dependencies
-/node_modules
-/.pnp
-.pnp.js
-.yarn/install-state.gz
+node_modules/
 
-# testing
-/coverage
-
-# next.js
-/.next/
-/out/
-
-# production
-/build
+# build output
+dist/
+build/
 
 # misc
 .DS_Store
@@ -27,9 +18,9 @@ yarn-error.log*
 .env*.local
 .env
 
-# vercel
-.vercel
-
 # typescript
 *.tsbuildinfo
-next-env.d.ts
+
+# HuggingFace model cache (downloaded at runtime, don't commit)
+.cache/
+server/.cache/
